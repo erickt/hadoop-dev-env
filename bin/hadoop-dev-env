@@ -29,6 +29,14 @@ DISTRIBUTION_MAP = {
             'zookeeper': 'zookeeper-3.4.5-cdh5.0.0',
         },
     },
+    'cdh5.4.2': {
+        'download_url_prefix': 'http://archive.cloudera.com/cdh5/cdh/5',
+        'libs': {
+            'hadoop': 'hadoop-2.6.0-cdh5.4.2',
+            'spark': 'spark-1.2.0-cdh5.4.2',
+            'zookeeper': 'zookeeper-3.4.5-cdh5.4.2',
+        },
+    },
 }
 
 DEPENDENCY_MAP = {
@@ -241,8 +249,7 @@ class HadoopLibrary(Library):
     def setup_environment(self, env):
         super(HadoopLibrary, self).setup_environment(env)
 
-        env['HADOOP_CONF_DIR'] = os.path.join(self.cluster.config_dir, 'hadoop-conf')
-        env['YARN_CONF_DIR'] = os.path.join(self.cluster.config_dir, 'yarn-conf')
+        env['HADOOP_CONF_DIR'] = os.path.join(self.cluster.config_dir, 'yarn-conf')
 
         env['HADOOP_PREFIX'] = self.working_dir
         env['HADOOP_HOME'] = self.working_dir
