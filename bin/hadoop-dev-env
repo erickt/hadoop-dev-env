@@ -53,6 +53,14 @@ DISTRIBUTION_MAP = {
             'zookeeper': 'zookeeper-3.4.5-cdh5.4.8',
         },
     },
+    'cdh5.7.0': {
+        'download_url_prefix': 'http://archive.cloudera.com/cdh5/cdh/5',
+        'libs': {
+            'hadoop': 'hadoop-2.6.0-cdh5.7.0',
+            'spark': 'spark-1.6.0-cdh5.7.0',
+            'zookeeper': 'zookeeper-3.4.5-cdh5.7.0',
+        },
+    },
 }
 
 DEPENDENCY_MAP = {
