@@ -3,5 +3,10 @@
         "local": true,
         "version": "cdh5.0.0",
         "libs": ["hadoop", "hbase", "zookeeper"]
+    },
+    "local-cdh5.2.0": {
+        "local": true,
+        "version": "cdh5.2.0",
+        "libs": ["hadoop", "hbase", "zookeeper"]
     }
 }

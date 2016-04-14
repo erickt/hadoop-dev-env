@@ -29,12 +29,28 @@ DISTRIBUTION_MAP = {
             'zookeeper': 'zookeeper-3.4.5-cdh5.0.0',
         },
     },
+    'cdh5.4.1': {
+        'download_url_prefix': 'http://archive.cloudera.com/cdh5/cdh/5',
+        'libs': {
+            'hadoop': 'hadoop-2.6.0-cdh5.4.1',
+            'spark': 'spark-1.2.0-cdh5.4.1',
+            'zookeeper': 'zookeeper-3.4.5-cdh5.4.1',
+        },
+    },
     'cdh5.4.2': {
         'download_url_prefix': 'http://archive.cloudera.com/cdh5/cdh/5',
         'libs': {
             'hadoop': 'hadoop-2.6.0-cdh5.4.2',
             'spark': 'spark-1.2.0-cdh5.4.2',
             'zookeeper': 'zookeeper-3.4.5-cdh5.4.2',
+        },
+    },
+    'cdh5.4.8': {
+        'download_url_prefix': 'http://archive.cloudera.com/cdh5/cdh/5',
+        'libs': {
+            'hadoop': 'hadoop-2.6.0-cdh5.4.8',
+            'spark': 'spark-1.3.0-cdh5.4.8',
+            'zookeeper': 'zookeeper-3.4.5-cdh5.4.8',
         },
     },
 }
@@ -44,6 +60,7 @@ DEPENDENCY_MAP = {
     'hbase': ['hadoop', 'zookeeper'],
     'cloudera-search': ['hadoop', 'zookeeper'],
     'zookeeper': [],
+    'spark': [],
 }
 
 class HadoopDevException(Exception):
@@ -119,6 +136,8 @@ class Cluster(object):
                 self.libs[lib_name] = ClouderaSearchLibrary(self, full_name)
             elif lib_name == 'zookeeper':
                 self.libs[lib_name] = ZookeeperLibrary(self, full_name)
+            elif lib_name == 'spark':
+                self.libs[lib_name] = SparkLibrary(self, full_name)
             else:
                 raise UnknownLibrary, lib_name
 
@@ -324,6 +343,29 @@ class ZookeeperLibrary(Library):
         super(ZookeeperLibrary, self).setup_environment(env)
 
         env['ZOOCFGDIR'] = os.path.join(self.cluster.config_dir, 'zookeeper-conf')
+        env['ZOOKEEPER_HOME'] = self.working_dir
+
+    def start(self):
+        env = dict(os.environ)
+        self.setup_environment(env)
+
+        self.execute('zkServer.sh', 'start', env=env)
+
+    def stop(self):
+        env = dict(os.environ)
+        self.setup_environment(env)
+
+        self.execute('zkServer.sh', 'stop', env=env)
+
+# ------------------------------------------------------------------------------
+
+class SparkLibrary(Library):
+    name = 'spark'
+
+    def setup_environment(self, env):
+        super(SparkLibrary, self).setup_environment(env)
+
+        env['ZOOCFGDIR'] = os.path.join(self.cluster.config_dir, 'spark-conf')
         env['ZOOKEEPER_HOME'] = self.working_dir
 
     def start(self):
